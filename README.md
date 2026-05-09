@@ -14,7 +14,7 @@ Check out the live deployment here: **[Link to Vercel/Netlify deployment here]**
 3. Install dependencies: `npm install`
 4. Set up environment variables in a `.env.local` file:
    ```env
-   ANTHROPIC_API_KEY=your_key_here
+   GEMINI_API_KEY=your_key_here
    RESEND_API_KEY=your_key_here
    SUPABASE_URL=your_url_here
    SUPABASE_ANON_KEY=your_key_here

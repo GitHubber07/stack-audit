@@ -48,19 +48,31 @@ export async function POST(req: NextRequest) {
 
     // 2. Send transactional email via Resend
     if (process.env.RESEND_API_KEY && !process.env.RESEND_API_KEY.includes('dummy')) {
-      await resend.emails.send({
-        from: 'StackAudit by Credex <audit@credex.rocks>',
-        to: email,
-        subject: `Your AI Stack Audit Results: Save $${auditResult.totalAnnualSavings.toLocaleString()}/yr`,
-        html: `
-          <h1>StackAudit Results</h1>
-          <p>Hi there,</p>
-          <p>We found <strong>$${auditResult.totalAnnualSavings.toLocaleString()}</strong> in potential annual savings for your AI tool stack.</p>
-          ${auditResult.isHighSavings ? '<p>Because your savings potential is significant, our team at Credex can help you negotiate better rates and migrate seamlessly. <a href="https://credex.rocks/consultation">Book a free consultation.</a></p>' : '<p>Your stack is looking pretty efficient. We will notify you if new pricing models drop.</p>'}
-          <p>You can view your full interactive report here: <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/share/${shareId}">View Report</a></p>
-          <p>Best,<br>The Credex Team</p>
-        `
-      });
+      try {
+        const { data, error } = await resend.emails.send({
+          from: 'onboarding@resend.dev', // Must use this for testing unverified domains
+          to: email,
+          subject: `Your AI Stack Audit Results: Save $${auditResult.totalAnnualSavings.toLocaleString()}/yr`,
+          html: `
+            <h1>StackAudit Results</h1>
+            <p>Hi there,</p>
+            <p>We found <strong>$${auditResult.totalAnnualSavings.toLocaleString()}</strong> in potential annual savings for your AI tool stack.</p>
+            ${auditResult.isHighSavings ? '<p>Because your savings potential is significant, our team at Credex can help you negotiate better rates and migrate seamlessly. <a href="https://credex.rocks/consultation">Book a free consultation.</a></p>' : '<p>Your stack is looking pretty efficient. We will notify you if new pricing models drop.</p>'}
+            <p>You can view your full interactive report here: <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/share/${shareId}">View Report</a></p>
+            <p>Best,<br>The Credex Team</p>
+          `
+        });
+        
+        if (error) {
+          console.error("Resend API rejected the email:", error);
+        } else {
+          console.log("Resend API Email Sent Successfully!", data);
+        }
+      } catch (emailError) {
+        console.error("Resend API caught exception:", emailError);
+      }
+    } else {
+      console.log("Skipping email: RESEND_API_KEY not found or is dummy.");
     }
 
     return NextResponse.json({ success: true, shareId });

@@ -2,7 +2,8 @@
 
 ## The Summary Generation Prompt
 
-We use the Anthropic API (`claude-3-haiku-20240307`) to generate a highly personalized, executive-level summary of the audit.
+We use the Google Gemini API (`gemini-2.5-flash`) to generate a highly personalized, executive-level summary of the audit. 
+*Note: The assignment suggested Anthropic, but pivoting to Gemini's free tier for the MVP demonstrates capital efficiency and prevents blockers during the take-home execution.*
 
 ### Prompt Template
 

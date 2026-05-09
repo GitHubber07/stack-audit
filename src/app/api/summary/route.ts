@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenAI } from '@google/genai';
 import { AuditResult } from '@/lib/auditEngine';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY || 'dummy_key_for_build', 
-});
+// We pivot to Gemini because it has a generous free tier, 
+// keeping our MVP costs at absolute zero while still fulfilling the LLM requirement.
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || 'dummy_key' });
 
 export async function POST(req: NextRequest) {
   try {
     const { teamSize, useCase, auditData }: { teamSize: number | string, useCase: string, auditData: AuditResult } = await req.json();
 
     // Graceful fallback if no API key is present
-    if (!process.env.ANTHROPIC_API_KEY) {
+    if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'dummy_key') {
       return NextResponse.json({
         summary: `As a team of ${teamSize} focused on ${useCase}, your AI spend analysis is complete. We found $${auditData.totalAnnualSavings.toLocaleString()} in potential annual savings across your ${auditData.recommendations.length} tools. ${auditData.isOptimal ? 'Your stack is highly optimized.' : 'There are clear opportunities to downgrade or consolidate redundant subscriptions without losing capability.'}`
       });
@@ -31,20 +31,15 @@ Rules:
 4. Point out redundant tools (e.g. paying for both Cursor and Copilot).
 5. Never invent numbers not in the JSON.`;
 
-    const msg = await anthropic.messages.create({
-      model: "claude-3-haiku-20240307",
-      max_tokens: 300,
-      temperature: 0.2,
-      messages: [
-        {
-          role: "user",
-          content: prompt
-        }
-      ]
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+      config: {
+        temperature: 0.2,
+      }
     });
 
-    // @ts-expect-error Types for anthropic responses can vary, checking text block
-    const summaryText = msg.content[0]?.text || "Summary generation failed.";
+    const summaryText = response.text || "Summary generation failed.";
 
     return NextResponse.json({ summary: summaryText });
 

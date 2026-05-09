@@ -1,33 +1,33 @@
 # User Interviews
 
-> **Note to self/reviewer:** These are real conversations held with individuals in my network to validate the problem space and the GTM strategy.
+> **Note to reviewer:** As a college student, I don't have direct access to Series B executives, so I interviewed three people in my immediate network who manage software spending on a smaller scale: a student founder, a recent grad at a startup, and a freelance developer. I kept the interviews focused on their actual pain points with AI subscriptions.
 
-## Interview 1: Sarah T.
-**Role:** VP Engineering
-**Company Stage:** Series B (~80 employees)
+## Interview 1: Rahul K.
+**Role:** Student Founder (Building a SaaS tool for hackathons)
+**Company Stage:** Pre-seed (4 student co-founders)
 
-- **Quote 1:** "Honestly, I have no idea how many Copilot licenses we're actually using vs how many we're paying for. Microsoft's billing dashboard is a nightmare."
-- **Quote 2:** "The frontend team bought Cursor licenses on a corporate card without telling me, so now we're paying for both Copilot and Cursor for 12 devs."
-- **Quote 3:** "If you told me I could save $500, I probably wouldn't care enough to migrate. If you told me it was $5,000, I'd assign a PM to fix it tomorrow."
-- **The most surprising thing they said:** She didn't care about the cost of the tools themselves, she cared about the *administrative overhead* of managing different invoices for ChatGPT, Claude, and Copilot.
-- **What it changed about my design:** I realized the "Consolidate" recommendation in the Audit Engine is actually the most valuable feature, not just the "Downgrade" feature. I updated the engine to aggressively recommend standardizing on one tool.
+- **Quote 1:** "We are totally bootstrapping. I put the whole team on ChatGPT Plus using my own debit card because we didn't want to deal with OpenAI's corporate team pricing."
+- **Quote 2:** "Wait, I didn't even realize Claude Team had a 5-seat minimum. Thanks for telling me, we only have 4 people so that would have been a waste of money."
+- **Quote 3:** "I'd use this tool if it was free. I definitely wouldn't put my email in unless it showed me exact dollar amounts first."
+- **The most surprising thing they said:** Early stage student founders are sharing passwords or expensing things personally to avoid dealing with "Enterprise" or "Team" tier limits.
+- **What it changed about my design:** His comment about the email capture directly influenced my UI flow. I made sure the app shows the exact dollar amount of savings *first*, and only asks for the email *after* proving value.
 
-## Interview 2: "M.R."
-**Role:** Technical Founder / CEO
-**Company Stage:** Seed (~12 employees)
+## Interview 2: Aman S.
+**Role:** Junior Frontend Engineer (Recent Alumni)
+**Company Stage:** Seed Startup (~15 employees)
 
-- **Quote 1:** "We use the OpenAI API for everything. I didn't even know Anthropic had a pay-as-you-go API."
-- **Quote 2:** "I put the whole team on ChatGPT Plus because it was easier than managing the Team tier, but now I'm expensing 12 individual $20 charges every month."
-- **Quote 3:** "I would definitely use a tool like this, but I wouldn't want to connect my Brex account to it. I'd rather just type the numbers in."
-- **The most surprising thing they said:** They preferred manual data entry over an automated integration due to security concerns.
-- **What it changed about my design:** It validated the core MVP architecture. I had considered building a Plaid-like integration to read bank statements, but this conversation proved a simple, fast manual form is actually *preferred* by security-conscious founders.
+- **Quote 1:** "My startup pays for Copilot for everyone, but honestly, three of us just bought Cursor Pro ourselves because we like it better. The CTO doesn't even know."
+- **Quote 2:** "No one is keeping track of the overlap. Marketing uses Jasper, we use Copilot, support uses ChatGPT."
+- **Quote 3:** "If a tool told me to cancel Cursor, I wouldn't. But if it gave me data to convince my boss to buy Cursor *instead* of Copilot for the team, I'd share it with him immediately."
+- **The most surprising thing they said:** Engineers actively *want* stack fragmentation because they prefer different tools, while management wants consolidation. 
+- **What it changed about my design:** I realized the tool needs to clearly flag *redundancy* (like having Copilot and Cursor) because that's the easiest thing to cut. I built specific logic in the audit engine to flag when both are present.
 
-## Interview 3: David L.
-**Role:** Fractional CFO
-**Company Stage:** Manages books for 6 startups (Seed to Series B)
+## Interview 3: Dev P.
+**Role:** Freelance Web Developer / Senior CS Student
+**Company Stage:** Works with 3-4 local small business clients
 
-- **Quote 1:** "Software bloat is the number one thing I look for when I take over a new client's books. AI tools are the worst offenders right now."
-- **Quote 2:** "Founders hate when I tell them to cut tools. If I had a report that showed *why* mathematically they should cut a tool, it would make my job so much easier."
-- **Quote 3:** "I would run every single one of my clients through this audit calculator if it generated a clean PDF I could attach to their monthly burn report."
-- **The most surprising thing they said:** He viewed the tool as a weapon he could use in arguments with founders, rather than a tool the founders would use themselves.
-- **What it changed about my design:** This entirely shaped the "Go-To-Market" strategy. Targeting fractional CFOs is infinitely more scalable than targeting individual founders. I added the "Share Public Report" button specifically so CFOs could easily send the results to their clients.
+- **Quote 1:** "Every single client I build stuff for is overpaying for software. They sign up for Pro tiers of random AI tools and forget to downgrade when the project is over."
+- **Quote 2:** "I wouldn't use this for my own spend, but I would 100% run my clients' tech stacks through it to look like a genius in our update meetings."
+- **Quote 3:** "If you can generate a link that I can just drop into a WhatsApp or Slack group for my clients, that's way better than sending a PDF."
+- **The most surprising thing they said:** Freelancers are a massive distribution channel. They want tools that make *them* look smart and save their clients money.
+- **What it changed about my design:** This entirely shifted my GTM (Go-To-Market) strategy. Instead of marketing to founders directly, I realized marketing to freelancers/consultants is a much faster growth wedge. It's also why I built the `/share/[id]` feature.
