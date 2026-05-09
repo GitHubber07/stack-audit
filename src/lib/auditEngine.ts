@@ -36,25 +36,28 @@ export function generateAudit(state: Pick<AuditState, "teamSize" | "useCase" | "
     let action: AuditRecommendation["recommendedAction"] = "KEEP";
     let savings = 0;
     let reason = "Your current plan fits your usage.";
+    
+    const seats = tool.seats || 0;
+    const monthlySpend = tool.monthlySpend || 0;
 
     // 1. ChatGPT Optimization
     if (tool.id === "chatgpt") {
-      if (tool.plan === "team" && tool.seats < 2) {
+      if (tool.plan === "team" && seats < 2) {
         action = "DOWNGRADE";
-        savings = tool.monthlySpend - 20; // Plus is 20
+        savings = monthlySpend - 20; // Plus is 20
         reason = "Team plan requires minimum 2 seats. For 1 seat, Plus ($20) offers identical capabilities.";
-      } else if (hasClaude && tool.seats === hasClaude.seats && state.useCase !== 'mixed') {
+      } else if (hasClaude && seats === (hasClaude.seats || 0) && state.useCase !== 'mixed') {
         action = "CONSOLIDATE";
-        savings = tool.monthlySpend;
+        savings = monthlySpend;
         reason = `You are paying for both ChatGPT and Claude for a ${state.useCase} team. Standardizing on one saves 100% of the redundant license cost.`;
       }
     }
 
     // 2. Claude Optimization
     if (tool.id === "claude") {
-      if (tool.plan === "team" && tool.seats < 5) {
+      if (tool.plan === "team" && seats < 5) {
         action = "DOWNGRADE";
-        savings = tool.monthlySpend - (tool.seats * 20); // Pro is 20/user
+        savings = monthlySpend - (seats * 20); // Pro is 20/user
         reason = "Claude Team enforces a 5-seat minimum ($150/mo). For your team size, individual Pro accounts are mathematically cheaper.";
       }
     }
@@ -63,11 +66,11 @@ export function generateAudit(state: Pick<AuditState, "teamSize" | "useCase" | "
     if (tool.id === "cursor") {
       if (tool.plan === "business" && state.teamSize !== '' && (state.teamSize as number) < 3) {
         action = "DOWNGRADE";
-        savings = tool.monthlySpend - (tool.seats * 20);
+        savings = monthlySpend - (seats * 20);
         reason = "Cursor Business ($40/mo) includes centralized billing and privacy. For very small teams (<3), individual Pro ($20/mo) is more capital efficient.";
       } else if (hasCopilot) {
         action = "CONSOLIDATE";
-        savings = tool.monthlySpend;
+        savings = monthlySpend;
         reason = "Paying for both Cursor and GitHub Copilot is highly redundant. Standardizing on one developer AI tool immediately halves your IDE spend.";
       }
     }
@@ -75,16 +78,16 @@ export function generateAudit(state: Pick<AuditState, "teamSize" | "useCase" | "
     if (tool.id === "copilot") {
       if (tool.plan === "enterprise" && state.teamSize !== '' && (state.teamSize as number) < 50) {
         action = "DOWNGRADE";
-        savings = tool.monthlySpend - (tool.seats * 19);
+        savings = monthlySpend - (seats * 19);
         reason = "Copilot Enterprise ($39/user) is designed for large orgs needing custom model fine-tuning. Copilot Business ($19/user) provides full enterprise-grade IP indemnity at half the cost.";
       }
     }
 
     // 4. API Optimization
     if (tool.id === "openai_api" || tool.id === "anthropic_api") {
-      if (tool.monthlySpend > 1000) {
+      if (monthlySpend > 1000) {
         action = "OPTIMIZE";
-        savings = tool.monthlySpend * 0.20; // Estimate 20% savings via credits/commitments
+        savings = monthlySpend * 0.20; // Estimate 20% savings via credits/commitments
         reason = "At >$1k/mo API spend, you are likely paying retail rates. Credex can source pre-committed credits or provisioned throughput for ~20% savings.";
       }
     }
@@ -96,7 +99,7 @@ export function generateAudit(state: Pick<AuditState, "teamSize" | "useCase" | "
     recommendations.push({
       toolId: tool.id,
       toolName: def.name,
-      currentSpend: tool.monthlySpend,
+      currentSpend: monthlySpend,
       recommendedAction: action,
       savingsMonthly: savings > 0 ? savings : 0,
       reasoning: reason

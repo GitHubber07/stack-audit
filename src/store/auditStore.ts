@@ -6,8 +6,8 @@ export type UseCase = 'coding' | 'writing' | 'data' | 'research' | 'mixed' | '';
 export interface ToolSpend {
   id: string; // e.g. 'cursor', 'copilot', 'claude', 'chatgpt'
   plan: string;
-  monthlySpend: number;
-  seats: number;
+  monthlySpend: number | '';
+  seats: number | '';
 }
 
 export interface AuditState {

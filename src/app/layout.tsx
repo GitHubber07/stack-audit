@@ -6,6 +6,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ subsets: ["latin"] });
 
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
+
 export const metadata: Metadata = {
   title: "StackAudit | Optimize Your AI Tool Spend",
   description: "Find out if you're overpaying for Cursor, Copilot, Claude, and ChatGPT. Get a personalized audit and save thousands.",
@@ -17,12 +20,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased min-h-screen flex flex-col`}>
-        <TooltipProvider>
-          {children}
-          <Toaster theme="dark" position="top-center" />
-        </TooltipProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TooltipProvider>
+            <ThemeToggle />
+            {children}
+            <Toaster position="top-center" />
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
