@@ -65,7 +65,7 @@ export default async function SharedAuditPage({ params }: { params: { id: string
           <CardContent>
              <Link href="/">
                <Button size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-500">
-                 Audit My Stack <span className="ml-2 font-mono opacity-50">It's Free</span>
+                 Audit My Stack <span className="ml-2 font-mono opacity-50">It&apos;s Free</span>
                </Button>
              </Link>
           </CardContent>

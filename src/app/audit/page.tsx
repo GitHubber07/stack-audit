@@ -25,6 +25,7 @@ export default function AuditResults() {
   const [isLeadCaptured, setIsLeadCaptured] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     if (store.tools.length === 0) {
       router.push("/");
@@ -189,7 +190,7 @@ export default function AuditResults() {
               <CardDescription className="text-gray-600 dark:text-gray-400 font-medium">
                 {result.isHighSavings 
                   ? "You have over $500/mo in savings potential. Credex can handle the vendor negotiations and migrations for you." 
-                  : "You're spending well. Enter your email to save this report and get notified when new AI pricing drops."}
+                  : "You&apos;re spending well. Enter your email to save this report and get notified when new AI pricing drops."}
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6">

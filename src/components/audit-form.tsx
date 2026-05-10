@@ -86,7 +86,7 @@ export function AuditForm() {
           >
             <Card className="border border-white/60 dark:border-white/10 bg-white/70 dark:bg-zinc-950/80 backdrop-blur-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-2xl">
               <CardHeader>
-                <CardTitle className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Let's audit your AI spend</CardTitle>
+                <CardTitle className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Let&apos;s audit your AI spend</CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-400 text-lg">
                   Tell us a bit about your team to get personalized recommendations.
                 </CardDescription>
@@ -155,7 +155,7 @@ export function AuditForm() {
                   <div>
                     <CardTitle className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Your AI Stack</CardTitle>
                     <CardDescription className="text-gray-600 dark:text-gray-400 text-lg">
-                      Select the tools you're currently paying for.
+                      Select the tools you&apos;re currently paying for.
                     </CardDescription>
                   </div>
                   <Button variant="ghost" onClick={() => setStep(1)} className="text-gray-500 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white transition-colors">
